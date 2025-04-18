@@ -1,6 +1,8 @@
 <?php
 require 'db.php';
-session_start();
+require '../vendor/autoload.php';
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 
 $username = $_POST['username'];
 $password = $_POST['password'];
@@ -10,9 +12,18 @@ $stmt->execute([$username]);
 $user = $stmt->fetch();
 
 if ($user && password_verify($password, $user['password'])) {
-    $_SESSION['user'] = $user['username']; 
-    echo "success"; 
+    $payload = [
+        'iss' => 'myproject',
+        'aud' => 'myproject',
+        'iat' => time(),
+        'exp' => time() + (60 * 60),
+        'uid' => $user['id'],
+        'username' => $user['username']
+    ];
+    $jwt = JWT::encode($payload, 'secret_key', 'HS256');
+    echo json_encode(['token' => $jwt]);
 } else {
-    echo "<span class='text-danger'>Invalid credentials</span>";
+    http_response_code(401);
+    echo json_encode(['error' => 'Invalid credentials']);
 }
 ?>

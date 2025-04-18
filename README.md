@@ -1,27 +1,55 @@
 # Login and Registration System
 
-This is a simple login and registration system built with:
+A secure login and registration system using JWT authentication, built with:
 
 - PHP
 - MySQL
 - jQuery & AJAX
 - Bootstrap 5
+- Firebase PHP-JWT
 
 ## Features
 - User registration with hashed password
-- User login with validation
-- Protected user area (`project.php`)
-- Simple database schema (`users` table)
-- AJAX-based forms for better UX
+- Secure user login with JWT token
+- Protected routes/pages using JWT verification
+- Logout with token cleanup
+- Responsive UI with AJAX-based forms
 
 ## Database Setup
-1. Import the `myproject_db.sql` file into your local MySQL server to create the `users` table.
+Import the `sql/myproject_db.sql` file into your MySQL server. It creates a `users` table inside the `myproject_db` database.
 
-## Usage
-1. Run using XAMPP/WAMP or any local PHP server.
-2. Access `index.html` to login or register.
-3. After login, users are redirected to `project.php` — a protected page only accessible if logged in.
-4. Attempting to access `project.php` directly without login will redirect back to the login page.
+## How to Run
+1. Start your local server using XAMPP/WAMP.
+2. Install dependencies using Composer: composer require firebase/php-jwt
+3. Open index.html in browser to register or login.
+4. After login, users are redirected to a protected page (protected/project.php).
+5. Direct access to protected pages is blocked unless a valid token is present.
+
+## Folder Structure
+myproject/
+│
+├── assets/
+│   └── css/
+│       └── style.css
+│   └── js/
+│       └── script.js
+│
+├── php/
+│   ├── db.php
+│   ├── login.php
+│   ├── logout.php
+│   ├── register.php
+│   └── validate_jwt.php
+│
+├── protected/
+│   └── project.php
+│
+├── sql/
+│   └── myproject_db.sql
+│
+├── index.html
+├── vendor/
+└── composer.json
 
 ## Author
 Built by [hager51](https://github.com/hager51)
