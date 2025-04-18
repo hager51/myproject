@@ -15,12 +15,15 @@ $('#registerForm').submit(function(e) {
   $('#loginForm').submit(function(e) {
     e.preventDefault();
     $.ajax({
-      type: 'POST',
-      url: 'php/login.php',
-      data: $(this).serialize(),
-      success: function(response) {
-        $('#loginMsg').html(response);
-      }
+        type: 'POST',
+        url: 'php/login.php',
+        data: $(this).serialize(),
+        success: function(response) {
+            if (response.trim() === "success") {
+                window.location.href = "project.php"; 
+            } else {
+                $('#loginMsg').html(response);
+            }
+        }
     });
   });
-  

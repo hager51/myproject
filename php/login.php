@@ -1,5 +1,6 @@
 <?php
 require 'db.php';
+session_start();
 
 $username = $_POST['username'];
 $password = $_POST['password'];
@@ -9,7 +10,8 @@ $stmt->execute([$username]);
 $user = $stmt->fetch();
 
 if ($user && password_verify($password, $user['password'])) {
-    echo "<span class='text-success'>Login successful! Welcome, {$user['username']}.</span>";
+    $_SESSION['user'] = $user['username']; 
+    echo "success"; 
 } else {
     echo "<span class='text-danger'>Invalid credentials</span>";
 }
