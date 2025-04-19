@@ -1,5 +1,3 @@
 <?php
-setcookie('token', '', time() - 3600, "/");
-header("Location: ../index.html");
-exit;
+echo json_encode(["success" => "Logged out (client-side token cleared)"]);
 ?>

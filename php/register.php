@@ -1,21 +1,23 @@
 <?php
+header('Content-Type: application/json');
 require 'db.php';
 
-$username = $_POST['username'];
-$email = $_POST['email'];
-$password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+$data = json_decode(file_get_contents("php://input"));
 
-$stmt = $pdo->prepare("SELECT * FROM users WHERE username = ? OR email = ?");
-$stmt->execute([$username, $email]);
+if (!$data->username || !$data->email || !$data->password) {
+    echo json_encode(['error' => 'All fields are required']);
+    exit;
+}
 
-if ($stmt->rowCount() > 0) {
-    echo "<span class='text-danger'>Username or Email already exists</span>";
-} else {
+$username = htmlspecialchars(trim($data->username));
+$email = htmlspecialchars(trim($data->email));
+$password = password_hash($data->password, PASSWORD_BCRYPT);
+
+try {
     $stmt = $pdo->prepare("INSERT INTO users (username, email, password) VALUES (?, ?, ?)");
-    if ($stmt->execute([$username, $email, $password])) {
-        echo "<span class='text-success'>Registration successful!</span>";
-    } else {
-        echo "<span class='text-danger'>Error registering user</span>";
-    }
+    $stmt->execute([$username, $email, $password]);
+    echo json_encode(['success' => 'User registered successfully']);
+} catch (PDOException $e) {
+    echo json_encode(['error' => 'Username or email already exists']);
 }
 ?>
