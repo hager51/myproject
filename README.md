@@ -12,7 +12,6 @@ A secure login and registration system using JWT authentication, built with:
 - User registration with hashed password
 - Secure user login with JWT token
 - Protected routes/pages using JWT verification
-- Logout with token cleanup
 - Responsive UI with AJAX-based forms
 
 ## Database Setup
@@ -24,32 +23,6 @@ Import the `sql/myproject_db.sql` file into your MySQL server. It creates a `use
 3. Open index.html in browser to register or login.
 4. After login, users are redirected to a protected page (protected/project.php).
 5. Direct access to protected pages is blocked unless a valid token is present.
-
-## Folder Structure
-myproject/
-│
-├── assets/
-│   └── css/
-│       └── style.css
-│   └── js/
-│       └── script.js
-│
-├── php/
-│   ├── db.php
-│   ├── login.php
-│   ├── logout.php
-│   ├── register.php
-│   └── validate_jwt.php
-│
-├── protected/
-│   └── project.php
-│
-├── sql/
-│   └── myproject_db.sql
-│
-├── index.html
-├── vendor/
-└── composer.json
 
 ## Author
 Built by [hager51](https://github.com/hager51)
