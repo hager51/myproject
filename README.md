@@ -8,6 +8,20 @@ A secure login and registration system using JWT authentication, built with:
 - Bootstrap 5
 - Firebase PHP-JWT
 
+## Requirements
+
+- PHP >= 7.4
+- MySQL
+- Composer
+
+## Installation
+
+1. Clone the repo.
+2. Run `composer install`.
+3. Import the SQL file to your DB.
+4. Set up local server (e.g., XAMPP).
+5. Visit `index.html` to start.
+
 ## Features
 - User registration with hashed password
 - Secure user login with JWT token
@@ -16,6 +30,18 @@ A secure login and registration system using JWT authentication, built with:
 
 ## Database Setup
 Import the `sql/myproject_db.sql` file into your MySQL server. It creates a `users` table inside the `myproject_db` database.
+
+### Database Structure
+
+**Table: users**
+| Column     | Type                 | Description           |
+|------------|----------------------|-----------------------|
+| id         | INT (AUTO_INCREMENT) | Primary key           |
+| name       | VARCHAR(100)         | User's full name      |
+| email      | VARCHAR(100)         | Unique email address  |
+| password   | TEXT                 | Hashed password       |
+| created_at | TIMESTAMP            | Account creation time |
+
 
 ## How to Run
 1. Start your local server using XAMPP/WAMP.

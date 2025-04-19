@@ -4,8 +4,8 @@ require 'db.php';
 
 $data = json_decode(file_get_contents("php://input"));
 
-if (!$data->username || !$data->email || !$data->password) {
-    echo json_encode(['error' => 'All fields are required']);
+if (empty($data->username) || empty($data->email) || empty($data->password)) {
+    echo json_encode(['error' => 'Please fill in all fields.']);
     exit;
 }
 

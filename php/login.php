@@ -38,5 +38,5 @@ if ($user && password_verify($password, $user['password'])) {
 
     echo json_encode(["token" => $jwt]);
 } else {
-    echo json_encode(["error" => "Invalid credentials"]);
+    echo json_encode(["error" => "Incorrect email or password."]);
 }
