@@ -27,7 +27,7 @@ loginForm.addEventListener('submit', async (e) => {
 
     const data = await res.json();
     if (data.token) {
-        localStorage.setItem('jwt', data.token);
+        sessionStorage.setItem('jwt', data.token);
         messageDiv.innerHTML = `<span class="text-success">Login successful!</span>`;
         setTimeout(() => window.location.href = 'dashboard.html', 1000);
     } else {
