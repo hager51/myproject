@@ -67,7 +67,7 @@
     // عرض معلومات المستخدم
     const token = sessionStorage.getItem('jwt');
     if (!token) {
-      document.getElementById('result').innerText = '⚠️ لا يوجد توكن. يرجى تسجيل الدخول.';
+      window.location.href = 'index.html';
     } else {
       fetch('protected/project.php', {
         headers: {
