@@ -9,6 +9,14 @@ header('Content-Type: application/json');
 
 $data = json_decode(file_get_contents("php://input"));
 
+// Make sure the users table exists.
+$check = $pdo->query("SHOW TABLES LIKE 'users'");
+if ($check->rowCount() == 0) {
+    http_response_code(500);
+    echo json_encode(['error' => '⚠️ The database is not configured. Please run install.php first.']);
+    exit;
+}
+
 if (!isset($data->email) || !isset($data->password)) {
     echo json_encode(['error' => 'Email and password are required']);
     exit;
@@ -18,14 +26,18 @@ $email = $data->email;
 $password = $data->password;
 
 $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
+if (!$stmt) {
+    echo json_encode(['error' => 'Query failed']);
+    exit;
+}
 $stmt->execute([$email]);
 $user = $stmt->fetch();
 
 if ($user && password_verify($password, $user['password'])) {
     $secretKey = "my_super_secret_key"; 
     $payload = [
-        "iss" => "http://myproject.com",
-        "aud" => "http://myproject.com",
+        "iss" => "http://localhost",
+        "aud" => "http://localhost",
         "iat" => time(),
         "exp" => time() + 3600, // 1 ساعة
         "data" => [
@@ -36,6 +48,8 @@ if ($user && password_verify($password, $user['password'])) {
 
     $jwt = JWT::encode($payload, $secretKey, 'HS256');
 
+    // Debug output:
+    file_put_contents('../php/debug.txt', print_r($user, true));
     echo json_encode(["token" => $jwt]);
 } else {
     echo json_encode(["error" => "Incorrect email or password."]);

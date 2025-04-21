@@ -18,41 +18,93 @@ loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
+    const loginBtn = document.getElementById('loginBtn');
 
-    const res = await fetch('php/login.php', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({email, password})
-    });
+    loginBtn.disabled = true;
+    loginBtn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> جاري الدخول...';
 
-    const data = await res.json();
-    if (data.token) {
-        sessionStorage.setItem('jwt', data.token);
-        messageDiv.innerHTML = `<span class="text-success">Login successful!</span>`;
-        setTimeout(() => window.location.href = 'dashboard.html', 1000);
-    } else {
-        messageDiv.innerHTML = `<span class="text-danger">${data.error}</span>`;
+    try {
+        const res = await fetch('php/login.php', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({email, password})
+        });
+
+        const data = await res.json();
+        if (data.token) {
+            sessionStorage.setItem('jwt', data.token);
+            Swal.fire({
+                icon: 'success',
+                title: 'You are logged in',
+                text: 'You are being redirected to the control panel...',
+                timer: 1000,
+                showConfirmButton: false
+            });
+            setTimeout(() => window.location.href = 'dashboard.html', 1000);
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: data.error
+            });
+        }
+    } catch (err) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Communication error',
+          text: err.message
+        });
     }
+
+    loginBtn.disabled = false;
+    loginBtn.innerHTML = 'Login';
 });
+
 
 // Handle Register
 registerForm.addEventListener('submit', async (e) => {
     e.preventDefault();
+
     const username = document.getElementById('registerUsername').value;
     const email = document.getElementById('registerEmail').value;
     const password = document.getElementById('registerPassword').value;
+    const registerBtn = document.getElementById('registerBtn');
 
-    const res = await fetch('php/register.php', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({username, email, password})
-    });
+    registerBtn.disabled = true;
+    registerBtn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Registering...';
 
-    const data = await res.json();
-    if (data.success) {
-        messageDiv.innerHTML = `<span class="text-success">${data.success}</span>`;
-        showForm('login');
-    } else {
-        messageDiv.innerHTML = `<span class="text-danger">${data.error}</span>`;
+    try {
+        const res = await fetch('php/register.php', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({username, email, password})
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Registration completed successfully',
+                text: data.success
+            });
+            showForm('login');
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Registration failed',
+                text: data.error
+            });
+        }
+
+    } catch (err) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Communication error',
+            text: err.message
+        });
     }
+
+    registerBtn.disabled = false;
+    registerBtn.innerHTML = 'Register';
 });

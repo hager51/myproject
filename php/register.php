@@ -4,6 +4,14 @@ require 'db.php';
 
 $data = json_decode(file_get_contents("php://input"));
 
+// Make sure the users table exists.
+$check = $pdo->query("SHOW TABLES LIKE 'users'");
+if ($check->rowCount() == 0) {
+    http_response_code(500);
+    echo json_encode(['error' => '⚠️ The database is not configured. Please run install.php first.']);
+    exit;
+}
+
 if (empty($data->username) || empty($data->email) || empty($data->password)) {
     echo json_encode(['error' => 'Please fill in all fields.']);
     exit;
