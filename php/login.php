@@ -1,11 +1,21 @@
 <?php
-require_once '../php/db.php';
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+require_once 'db.php';
 require_once '../vendor/autoload.php';
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
 header('Content-Type: application/json');
+
+if (strpos($_SERVER["CONTENT_TYPE"] ?? '', 'application/json') !== 0) {
+    http_response_code(400);
+    echo json_encode(["error" => "Invalid content type"]);
+    exit;
+}
 
 $data = json_decode(file_get_contents("php://input"));
 
